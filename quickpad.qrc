@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/Images">
+        <file>images/close_window-48.png</file>
+        <file>images/copy-48.png</file>
+        <file>images/cut-48.png</file>
+        <file>images/redo-48.png</file>
+        <file>images/save-48.png</file>
+        <file>images/save_as-48.png</file>
+        <file>images/undo-48.png</file>
+        <file>images/add_file-48.png</file>
+        <file>images/opened_folder-48.png</file>
+        <file>images/cllipboard-48.png</file>
+        <file>images/about-128.png</file>
+    </qresource>
+</RCC>
