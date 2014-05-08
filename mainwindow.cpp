@@ -1,4 +1,5 @@
 #include <QtGui>
+#include <QCloseEvent>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -10,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QObject::connect(ui->textEdit, SIGNAL(textChanged()), this, SLOT(on_Changed()));
+    QObject::connect(ui->textEdit, SIGNAL(textChanged()), this, SLOT(textChanged()));
 }
 
 MainWindow::~MainWindow()
@@ -18,9 +19,36 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_Changed()
+void MainWindow::textChanged()
 {
     m_Changed = true;
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    if(m_Changed) {
+        QMessageBox msgBox;
+
+        msgBox.setText("The document has been modified.");
+        msgBox.setInformativeText("Do you want to save your changes?");
+        msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        msgBox.setDefaultButton(QMessageBox::Save);
+
+        switch (msgBox.exec()) {
+            case QMessageBox::Save:
+                on_ActionSave_triggered();
+                break;
+
+            case QMessageBox::Cancel:
+                event->ignore();
+                return;
+
+            default:
+                break;
+        }
+    }
+
+    event->accept();
 }
 
 /* menu file */
@@ -51,6 +79,8 @@ void MainWindow::on_ActionNew_triggered()
     ui->textEdit->clear();
     m_Filename.clear();
     m_Changed = false;
+
+    UpdateTitle();
 }
 
 void MainWindow::on_ActionOpen_triggered()
@@ -68,6 +98,8 @@ void MainWindow::on_ActionOpen_triggered()
             ui->textEdit->setPlainText(in.readAll());
 
             m_Filename = filename;
+
+            UpdateTitle();
         }
     }
 }
@@ -105,6 +137,8 @@ void MainWindow::on_ActionSave_as_triggered()
 
             m_Filename = filename;
             m_Changed = false;
+
+            UpdateTitle();
         }
     }
 }

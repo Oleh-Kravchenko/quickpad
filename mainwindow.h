@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QCloseEvent>
 
 namespace Ui {
 class MainWindow;
@@ -15,8 +16,12 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+protected:
+
+    void closeEvent(QCloseEvent *event);
+
 private slots:
-    void on_Changed();
+    void textChanged();
 
     /* menu file */
 
@@ -43,6 +48,20 @@ private slots:
     /* menu help */
 
     void on_ActionAbout_triggered();
+
+private:
+
+    void UpdateTitle()
+    {
+        QString title = "QuickPad";
+
+        if (!m_Filename.isEmpty()) {
+            title += " - " + m_Filename;
+        }
+
+        this->setWindowTitle(title);
+
+    }
 
 private:
     Ui::MainWindow *ui;
